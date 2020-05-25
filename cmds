@@ -1,0 +1,36 @@
+sudo docker run --gpus all -it -v $(pwd):/home/stylegan2 tf1.15 bash
+python run_generator.py generate-images --network=models/stylegan2-cat-config-f.pkl --seeds=0-10 --truncation-psi=0.5
+
+python run_generator.py generate-images --network=models/2020-01-11-skylion-stylegan2-animeportraits-networksnapshot-024664.pkl --seeds=0-10 --truncation-psi=0.3
+
+sudo docker run --gpus all -it tf1.15 "python run_generator.py generate-images --network=models/stylegan2-cat-config-f.pkl--seeds=0 --truncation-psi=0.5"
+
+python run_projector.py project-generated-images --network=models/2020-01-11-skylion-stylegan2-animeportraits-networksnapshot-024664.pkl --seeds=0-10 --truncation-psi=0.5
+
+python run_projector.py project-real-images --network=models/2020-01-11-skylion-stylegan2-animeportraits-networksnapshot-024664.pkl \
+  --dataset=records --data-dir=./projection --num-images 1
+
+
+docker build --tag tfgpujupyter:1.15 .
+
+docker image ls
+
+docker run --name tf-bash --gpus all -it -u $(id -u):$(id -g) -p 8888:8888 -v $(pwd):/tf/stylegan2 tfgpujupyter:1.15 bash
+
+docker start tf-bash
+
+docker exec -it -u $(id -u):$(id -g)  -w /tf/stylegan2 tf-bash bash
+
+
+docker run --name tf --gpus all -it -u $(id -u):$(id -g) -p 8888:8888 -v $(pwd):/tf/stylegan2 tfgpujupyter:1.15
+
+docker ps
+
+docker run --name tf-jupyter --gpus all -it -u $(id -u):$(id -g) -p 8888:8888 -v $(pwd):/tf/stylegan2 tf:latest
+
+
+docker rm tf
+
+
+
+
