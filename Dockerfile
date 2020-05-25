@@ -4,8 +4,12 @@
 # To view a copy of this license, visit
 # https://nvlabs.github.io/stylegan2/license.html
 
-FROM tensorflow/tensorflow:1.15.0-gpu-py3
+FROM tensorflow/tensorflow:1.15.0-gpu-py3-jupyter
 
 RUN pip install scipy==1.3.3
 RUN pip install requests==2.22.0
 RUN pip install Pillow==6.2.1
+RUN pip install imageio
+RUN pip install opencv-contrib-python
+RUN pip install imageio-ffmpeg
+RUN pip install moviepy
